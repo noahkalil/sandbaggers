@@ -57,6 +57,7 @@ model Matchup {
   team2Id   Int
   season    Season  @relation(fields: [seasonId], references: [id])
   seasonId  Int
+  matchResults MatchResult[]
 }
 
 // MatchResult model to represent results of individual matches within a matchup
