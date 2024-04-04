@@ -32,6 +32,8 @@ model Team {
   players   Player[] // Each team has multiple players
   season    Season   @relation(fields: [seasonId], references: [id])
   seasonId  Int
+  matchupsTeam1 Matchup[] @relation("MatchupsTeam1")
+  matchupsTeam2 Matchup[] @relation("MatchupsTeam2")
 }
 
 // Player model to represent individual players
@@ -40,7 +42,8 @@ model Player {
   name        String
   team        Team?       @relation(fields: [teamId], references: [id])
   teamId      Int?
-  matchResults MatchResult[] // Track match results for the player across seasons
+  matchResults1 MatchResult[] @relation("PlayerMatch1")
+  matchResults2 MatchResult[] @relation("PlayerMatch2")
 }
 
 // Matchup model to represent matchups between two teams within a season
@@ -48,13 +51,13 @@ model Matchup {
   id        Int     @id @default(autoincrement())
   week      Int     // Week number of the matchup
   date      DateTime
-  team1     Team    @relation("MatchupTeam1", fields: [team1Id], references: [id]) // First team in the matchup
+  team1     Team    @relation("MatchupsTeam1", fields: [team1Id], references: [id]) // First team in the matchup
   team1Id   Int
-  team2     Team    @relation("MatchupTeam2", fields: [team2Id], references: [id]) // Second team in the matchup
+  team2     Team    @relation("MatchupsTeam2", fields: [team2Id], references: [id]) // Second team in the matchup
   team2Id   Int
   season    Season  @relation(fields: [seasonId], references: [id])
   seasonId  Int
-  results   MatchResult[] // Results of each individual match within the matchup
+  matchResults MatchResult[]
 }
 
 // MatchResult model to represent results of individual matches within a matchup
