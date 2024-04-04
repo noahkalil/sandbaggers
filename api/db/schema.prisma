@@ -16,33 +16,56 @@ generator client {
 
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
 // to create migrations for them and apply to your dev DB.
+
+// Season model to represent different seasons
 model Season {
-  id    Int   @id @default(autoincrement())
-  players Int[]
-  teams Int[]
-  matches Int[]
+  id        Int       @id @default(autoincrement())
+  year      Int       // Year of the season
+  teams     Team[]    // Teams participating in the season
+  matchups  Matchup[] // Matchups in the season
 }
 
-model Player {
-  id    Int   @id @default(autoincrement())
-  name  String
-}
-
+// Team model to represent teams participating in the league for a specific season
 model Team {
-  id    Int   @id @default(autoincrement())
-  players Int[]
-  
+  id        Int      @id @default(autoincrement())
+  name      String
+  players   Player[] // Each team has multiple players
+  season    Season   @relation(fields: [seasonId], references: [id])
+  seasonId  Int
 }
 
-model Match {
-  id    Int   @id @default(autoincrement())
-  scores Int[]
-  date
+// Player model to represent individual players
+model Player {
+  id          Int         @id @default(autoincrement())
+  name        String
+  team        Team?       @relation(fields: [teamId], references: [id])
+  teamId      Int?
+  matchResults MatchResult[] // Track match results for the player across seasons
 }
 
-model Scores {
-  id    Int   @id @default(autoincrement())
-  matchId Int
-  playerId Int
-  score Int
+// Matchup model to represent matchups between two teams within a season
+model Matchup {
+  id        Int     @id @default(autoincrement())
+  week      Int     // Week number of the matchup
+  date      DateTime
+  team1     Team    @relation("MatchupTeam1", fields: [team1Id], references: [id]) // First team in the matchup
+  team1Id   Int
+  team2     Team    @relation("MatchupTeam2", fields: [team2Id], references: [id]) // Second team in the matchup
+  team2Id   Int
+  season    Season  @relation(fields: [seasonId], references: [id])
+  seasonId  Int
+  results   MatchResult[] // Results of each individual match within the matchup
+}
+
+// MatchResult model to represent results of individual matches within a matchup
+model MatchResult {
+  id          Int     @id @default(autoincrement())
+  matchup     Matchup @relation(fields: [matchupId], references: [id])
+  matchupId   Int
+  player1     Player  @relation("PlayerMatch1", fields: [player1Id], references: [id]) // Player from team 1
+  player1Id   Int
+  player2     Player  @relation("PlayerMatch2", fields: [player2Id], references: [id]) // Player from team 2
+  player2Id   Int
+  player1Score Int     // Score of player 1
+  player2Score Int     // Score of player 2
 }
