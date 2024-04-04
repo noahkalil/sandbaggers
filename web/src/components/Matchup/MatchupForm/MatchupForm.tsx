@@ -7,7 +7,7 @@ import {
   FieldError,
   Label,
   NumberField,
-  DatetimeLocalField,
+  DateField,
   Submit,
 } from '@redwoodjs/forms'
 
@@ -67,7 +67,7 @@ const MatchupForm = (props: MatchupFormProps) => {
           Date
         </Label>
 
-        <DatetimeLocalField
+        <DateField
           name="date"
           defaultValue={formatDatetime(props.matchup?.date)}
           className="rw-input"
