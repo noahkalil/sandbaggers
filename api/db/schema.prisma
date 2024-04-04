@@ -68,4 +68,5 @@ model MatchResult {
   player2Id   Int
   player1Score Int     // Score of player 1
   player2Score Int     // Score of player 2
+  player      Player[] // Reference to players in the match result
 }
