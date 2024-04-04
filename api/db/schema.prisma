@@ -32,6 +32,8 @@ model Team {
   players   Player[] // Each team has multiple players
   season    Season   @relation(fields: [seasonId], references: [id])
   seasonId  Int
+  matchupsTeam1 Matchup[]
+  matchupsTeam2 Matchup[]
 }
 
 // Player model to represent individual players
